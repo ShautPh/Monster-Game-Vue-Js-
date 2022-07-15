@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Monster Slayer</h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="{width:monsterHealth+'%'}"></div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div  :class="[playerHealth<30?'dangerbar__value': 'healthbar__value']" :style="{width:playerHealth+'%'}"></div>
+        </div>
+      </section>
+      <section class="container" v-if="isDie">
+        <h2>Game Over!</h2>
+        <img v-if="gameOver == 'monster'" src="images/loser.webp" alt="loser">
+        <img v-else src="images/winner.webp" alt="winner">
+        <h3 v-if="gameOver == 'monster'">You lost!</h3>
+        <h3 v-else>You won!</h3>
+        <button @click="startGame()">Start New Game</button>
+      </section>
+      <section id="controls" v-else>
+        <button @click="attack()">ATTACK</button>
+        <button @click="specialAttack()" :disabled="isUsed">SPECIAL ATTACK</button>
+        <button @click="healt()">HEAL</button>
+        <button @click="commitSuicide()">KILL YOURSELF</button>
+      </section>
+      <section id="log" class="container">
+        <h2>Battle Log</h2>
+        <ul v-for="message in logMessages.reverse()">
+          <li >
+            <span>Player</span>
+            <span v-if="message.heal != null"> heals himself for <span class="log--heal">{{message.heal}}</span></span>
+            <span v-else> attacks <span class="log--damage">{{message.user}}</span></span>
+          </li>
+          <li>
+            <span>Monster attaked for <span class="log--damage">{{message.monster}}</span></span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
